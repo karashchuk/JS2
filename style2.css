@@ -1,0 +1,23 @@
+td{
+	border: 1px solid gray;
+    text-align:center;
+
+}
+
+td{
+	height:40px;
+	width:40px;
+
+	/*padding: 10px 15px 20px 7px;*/
+}
+td.name{
+    border: 1px solid transparent;
+}
+td.highlight {
+	border: 1px solid red;
+}
+div{
+    border: 1px solid black;
+    width: auto;
+    height: 100px;
+}
