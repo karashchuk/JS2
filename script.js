@@ -28,8 +28,9 @@ function ChessTable()
             for (var j = 1; j <= myCol; j++)
             {
                 NewRow.appendChild(document.createElement('td'));
-                if ((i+j)%2==1){
-                    myTable.children[i+1].children[j].style.backgroundColor="gray";
+                if ((i+j)%2==1)
+                {
+                myTable.children[i+1].children[j].style.backgroundColor="gray";
                 }
             }
         }
@@ -59,6 +60,8 @@ function Field(node){
 
     //Метод вывода адреса ячейки
     this.print = function (){
+        var r = selectedTd.parentElement.rowIndex;
+        var c = selectedTd.cellIndex;
         var cl = lit[c];
         document.getElementById('log').innerHTML += cl + r + ', ';   
     }
