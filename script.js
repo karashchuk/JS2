@@ -5,7 +5,6 @@ var selectedTd;
 function ChessTable()
 {
     //Метод создания Шахматной доски.
-    
     this.create = function()
     {
         var myTable = document.getElementById('Mytable').children[0];
@@ -28,10 +27,7 @@ function ChessTable()
             for (var j = 1; j <= myCol; j++)
             {
                 NewRow.appendChild(document.createElement('td'));
-                if ((i+j)%2==1)
-                {
-                myTable.children[i+1].children[j].style.backgroundColor="gray";
-                }
+                if ((i+j)%2==1) myTable.children[i+1].children[j].style.backgroundColor="gray";
             }
         }
         var myTable = document.getElementById('Mytable');
@@ -99,13 +95,44 @@ function Field(node){
 
 }
 
+//Расширение для всех строковых объектов для вывода в HTML-елемент
+//
+String.prototype.addToElement = function(tip,klass)
+{
+    return '<'+tip+' class = '+'"'+klass+'"'+'>'+this+'</'+tip+'>';
+}
+
+
+//Класс для работы с HTML - строкой
+function Html(elem)
+{
+    var x;
+    this.addText = function(str) {
+        return elem.textContent += str ;
+    }
+    
+    this.addH = function(str,number){
+        x = '<h'+number+'>' + elem.innerHTML + str+'</h'+number+'>';
+        return x;
+    }
+    
+    this.showHtml = function(){
+        elem.innerHTML = x;
+    }
+}
+
+
 window.onload = function()
 {
+    //Создаем шахматную доску
     var myChess = new ChessTable();
     myChess.create();
     var myTable = document.getElementById('Mytable');
     
+
+    
     //Действие при выделении мышкой
+    //
     myTable.onclick = function(event)
     {
       var target = event.target;
@@ -124,7 +151,9 @@ window.onload = function()
         target = target.parentNode;
       }
     }
+    
     //Действие при нажатии стрелок
+    //
     window.onkeydown=function(event){
         var myField = new Field (selectedTd);
         switch(event.keyCode){
@@ -141,5 +170,21 @@ window.onload = function()
                 myField.toDown();
                 break;            
         }
-    }    
+    }
+    
+    //Добавление текста с помощью объекта Html
+    //
+    var myHtml = new Html(document.getElementById('n1'));
+    myHtml.addText(' добавление текста ');
+    myHtml.addText('  и еще одно добавление текста ');
+    
+    var myHtml2 = new Html(document.getElementById('n2'));
+    myHtml2.addH('     добавление содержимого и вывод в теге h2 ',2);
+    myHtml2.showHtml();
+    
+    //Добавление елемента на страницу с помошью расширения для String
+    //
+    var textInside = 'Тестирование расширения addToElement';
+    document.getElementById('n0').innerHTML = textInside.addToElement('div','red');
+    
 }
