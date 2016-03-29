@@ -16,18 +16,18 @@ function ChessTable()
         {
             //Создаем новую строку в таблице
             myTable.appendChild(document.createElement('tr'));
-            var NewRow=myTable.children[i+1];
+            var NewRow = myTable.children[i+1];
             
             //Создаем первый элемент, снимаем рамку и нумеруем
             NewRow.appendChild(document.createElement('td'));
-            NewRow.children[0].style.border="1px solid transparent";
-            NewRow.children[0].innerHTML= "" + (i + 1);
+            NewRow.children[0].style.border = "1px solid transparent";
+            NewRow.children[0].innerHTML = "" + (i + 1);
             
             //Создаем еще myCol клеток и раскрашиваем
             for (var j = 1; j <= myCol; j++)
             {
                 NewRow.appendChild(document.createElement('td'));
-                if ((i+j)%2==1) myTable.children[i+1].children[j].style.backgroundColor="gray";
+                if ( (i+j)%2 == 1 ) myTable.children[i+1].children[j].style.backgroundColor="gray";
             }
         }
         var myTable = document.getElementById('Mytable');
@@ -99,11 +99,11 @@ function Field(node){
 //
 String.prototype.addToElement = function(tip,klass)
 {
-    return '<'+tip+' class = '+'"'+klass+'"'+'>'+this+'</'+tip+'>';
+    return '<' + tip + ' class = ' + '"' + klass + '"' + '>' + this + '</' + tip + '>';
 }
 
 
-//Класс для работы с HTML - строкой
+//Объект для работы с HTML - строкой
 function Html(elem)
 {
     var x;
@@ -112,7 +112,7 @@ function Html(elem)
     }
     
     this.addH = function(str,number){
-        x = '<h'+number+'>' + elem.innerHTML + str+'</h'+number+'>';
+        x = '<h' + number + '>' + elem.innerHTML + str + '</h' + number + '>';
         return x;
     }
     
@@ -154,7 +154,7 @@ window.onload = function()
     
     //Действие при нажатии стрелок
     //
-    window.onkeydown=function(event){
+    window.onkeydown = function(event){
         var myField = new Field (selectedTd);
         switch(event.keyCode){
             case 37:
@@ -172,19 +172,28 @@ window.onload = function()
         }
     }
     
+    //Добавление элемента на страницу с помошью расширения для String
+    //
+    document.getElementById('btn1').onclick = function(){
+        var textInside = 'Тестирование расширения addToElement';
+        document.getElementById('n0').innerHTML = textInside.addToElement('div','red');
+    }
+    
     //Добавление текста с помощью объекта Html
     //
-    var myHtml = new Html(document.getElementById('n1'));
-    myHtml.addText(' добавление текста ');
-    myHtml.addText('  и еще одно добавление текста ');
+    document.getElementById('btn2').onclick = function(){ 
+        var myHtml = new Html(document.getElementById('n1'));
+        myHtml.addText('  и добавление текста ');
+        //myHtml.addText('  и еще одно добавление текста ');
+    }
+    var btn = document.getElementById('btn3');
+    btn.onclick = function(){
+        var myHtml2 = new Html(document.getElementById('n2'));
+        myHtml2.addH('     добавление содержимого и вывод в теге h2 ',2);
+        myHtml2.showHtml();
+        btn.disabled = true;
+    }
     
-    var myHtml2 = new Html(document.getElementById('n2'));
-    myHtml2.addH('     добавление содержимого и вывод в теге h2 ',2);
-    myHtml2.showHtml();
-    
-    //Добавление елемента на страницу с помошью расширения для String
-    //
-    var textInside = 'Тестирование расширения addToElement';
-    document.getElementById('n0').innerHTML = textInside.addToElement('div','red');
+
     
 }
