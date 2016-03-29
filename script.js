@@ -1,5 +1,7 @@
-//Объект "Шахматная доска"
+var selectedTd;
 
+//Объект "Шахматная доска"
+//
 function ChessTable()
 {
     //Метод создания Шахматной доски.
@@ -11,7 +13,6 @@ function ChessTable()
         var myCol = 8;
         
         //Генерируем поле 8*8 и дополнительно левые клетки c цифрами для обозначения рядов
-        
         for (var i = 0; i < myRow; i++)
         {
             //Создаем новую строку в таблице
@@ -23,58 +24,31 @@ function ChessTable()
             NewRow.children[0].style.border="1px solid transparent";
             NewRow.children[0].innerHTML= "" + (i + 1);
             
-            //Создаем еще myCol клеток
+            //Создаем еще myCol клеток и раскрашиваем
             for (var j = 1; j <= myCol; j++)
             {
                 NewRow.appendChild(document.createElement('td'));
+                if ((i+j)%2==1){
+                    myTable.children[i+1].children[j].style.backgroundColor="gray";
+                }
             }
         }
-        //Закрашиваем клетки через одну
-        
-        for(j = 1; j <= myRow; j++)
-        {
-            var i;
-            if(j%2 == 0){
-                i = 2;
-            }
-            else{
-                i = 1;
-            }
-            for(i; i <= myCol; i+= 2)
-            {
-               myTable.children[j].children[i].style.backgroundColor="gray"; 
-            }
-        }
+        var myTable = document.getElementById('Mytable');
+        selectedTd = myTable.rows[1].cells[1];
     }
-}
-var selectedTd;
-function highlight(node) 
-{
-  if (selectedTd) {
-    selectedTd.classList.remove('highlight');
-  }
-    selectedTd = node;
-    selectedTd.classList.add('highlight');
-}
-
-var lit = ['0','A','B','C','D','E','F','G','H'];
-function printSelected(){
-    var r = selectedTd.parentElement.rowIndex;
-    var c = selectedTd.cellIndex;
-    var cl = lit[c];
-    document.getElementById('log').innerHTML+=' ' + cl + r + ', ';   
 }
 
 //Объект Поле
+//
+var selectedTd;
 function Field(node){
     var myTable = document.getElementById('Mytable');
-    //var selectedTd;
     var lit = ['0','A','B','C','D','E','F','G','H'];
-    if (selectedTd){
-    //var r = selectedTd.parentElement.rowIndex;
-    //var c = selectedTd.cellIndex;
-    }
-    this.hightlight = function () 
+    var r = selectedTd.parentElement.rowIndex;
+    var c = selectedTd.cellIndex;
+    
+    //Метод выделения ячейки
+    this.hightlight = function (node) 
     {
         if (selectedTd) {
         selectedTd.classList.remove('highlight');
@@ -83,49 +57,40 @@ function Field(node){
         selectedTd.classList.add('highlight');
     }
 
+    //Метод вывода адреса ячейки
     this.print = function (){
-        var r = node.parentElement.rowIndex;
-        var c = node.cellIndex;
         var cl = lit[c];
         document.getElementById('log').innerHTML += cl + r + ', ';   
     }
+    
+    //Методы сдвига ячейки по стрелке
     this.toLeft = function (){
-        var r = node.parentElement.rowIndex;
-        var c = node.cellIndex;
         var cnew = c - 1;
-        if(c <= 1){cnew = 1}
+        if(c <= 1) cnew = 1;
         var newCell = myTable.rows[r].cells[cnew];
-        highlight(newCell);
-        if(c > 1)printSelected();
+        this.hightlight(newCell);
+        if(c > 1)this.print();
     }
     this.toUp = function (){
-        var r = node.parentElement.rowIndex;
-        var c = node.cellIndex;
         var rnew = r - 1;
-        if(r <= 1){rnew = 1}
+        if(r <= 1) rnew = 1;
         var newCell = myTable.rows[rnew].cells[c];
-        highlight(newCell);
-        if(r > 1)printSelected();        
+        this.hightlight(newCell);
+        if(r > 1)this.print();        
     }
     this.toRight = function (){
-        var r = node.parentElement.rowIndex;
-        var c = node.cellIndex;
         var cnew = c + 1;
-        if(c >= 8){cnew = 8}
+        if(c >= 8) cnew = 8;
         var newCell = myTable.rows[r].cells[cnew];
-        highlight(newCell);
-        var cl = lit[cnew];
-        if(c < 8)printSelected();       
+        this.hightlight(newCell);
+        if(c < 8)this.print();       
     }
     this.toDown = function (){
-        var r = node.parentElement.rowIndex;
-        var c = node.cellIndex;
         var rnew = r + 1;
-        if(r >= 8){rnew = 8}
+        if(r >= 8) rnew = 8;
         var newCell = myTable.rows[rnew].cells[c];
-        highlight(newCell);
-        var cl = lit[c];
-        if(r < 8)printSelected();        
+        this.hightlight(newCell);
+        if(r < 8)this.print();        
     }
     
 
@@ -135,9 +100,9 @@ window.onload = function()
 {
     var myChess = new ChessTable();
     myChess.create();
-    var node;
-    var myField = new Field(node);
     var myTable = document.getElementById('Mytable');
+    
+    //Действие при выделении мышкой
     myTable.onclick = function(event)
     {
       var target = event.target;
@@ -149,16 +114,16 @@ window.onload = function()
           
         if (target.tagName == 'TD' && r>0 && c>0 )
         {
-            myField.hightlight();
+            myField.hightlight(target);
             myField.print();
           return;
         }
         target = target.parentNode;
       }
     }
+    //Действие при нажатии стрелок
     window.onkeydown=function(event){
         var myField = new Field (selectedTd);
-
         switch(event.keyCode){
             case 37:
                 myField.toLeft();
