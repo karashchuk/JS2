@@ -112,7 +112,7 @@ function Html(elem)
     }
     
     this.addH = function(str,number){
-        x = '<h' + number + '>' + elem.innerHTML + str + '</h' + number + '>';
+        x = elem.innerHTML + '<h' + number + '>' + str + '</h' + number + '>';
         return x;
     }
     
@@ -186,12 +186,10 @@ window.onload = function()
         myHtml.addText('  и добавление текста ');
         //myHtml.addText('  и еще одно добавление текста ');
     }
-    var btn = document.getElementById('btn3');
-    btn.onclick = function(){
+    document.getElementById('btn3').onclick = function(){
         var myHtml2 = new Html(document.getElementById('n2'));
         myHtml2.addH('     добавление содержимого и вывод в теге h2 ',2);
         myHtml2.showHtml();
-        btn.disabled = true;
     }
     
 
